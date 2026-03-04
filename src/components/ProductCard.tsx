@@ -20,7 +20,7 @@ export const ProductCard = memo(function ProductCard({
 }: ProductCardProps) {
   const {colors} = useThemeColors();
 
-  const subtitle = [product.brand, product.category]
+  const subtitle = [product.brand]
     .filter(Boolean)
     .join(' \u2022 ');
 
