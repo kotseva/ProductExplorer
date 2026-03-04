@@ -145,6 +145,7 @@ export function MainScreen() {
         </View>
       ) : (
         <FlatList
+          testID="product-list"
           ref={flatListRef}
           data={state.products}
           renderItem={renderProduct}
