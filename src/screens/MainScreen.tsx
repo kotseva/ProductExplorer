@@ -1,8 +1,9 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
   Pressable,
+  RefreshControl,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -29,7 +30,18 @@ export function MainScreen() {
   const {toggleFavorite, isFavorite} = useFavorites();
   const {colors} = useThemeColors();
   const {width: screenWidth} = useWindowDimensions();
+  const [refreshing, setRefreshing] = useState(false);
+  const flatListRef = useRef<FlatList<Product>>(null);
 
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadProducts();
+    setRefreshing(false);
+    // Reset scroll position so the user sees the freshly loaded content from the top
+    flatListRef.current?.scrollToOffset({offset: 0, animated: true});
+  }, [loadProducts]);
+
+  // Evenly distribute available width after subtracting outer padding and inter-column gaps
   const cardWidth =
     (screenWidth - GRID_PADDING * 2 - CARD_GAP * (NUM_COLUMNS - 1)) /
     NUM_COLUMNS;
@@ -79,6 +91,7 @@ export function MainScreen() {
   const isEmpty = !state.isLoading && state.products.length === 0;
 
   return (
+    // Only apply safe-area inset at the top; the bottom is handled by the FlatList's paddingBottom
     <SafeAreaView
       style={[styles.safeArea, {backgroundColor: colors.background}]}
       edges={['top']}
@@ -123,7 +136,7 @@ export function MainScreen() {
               >
                 <Text style={styles.retryText}>Retry</Text>
               </Pressable>
-            </>
+            </>            
           ) : (
             <Text style={[styles.emptyText, {color: colors.textSecondary}]}>
               No products found
@@ -132,6 +145,7 @@ export function MainScreen() {
         </View>
       ) : (
         <FlatList
+          ref={flatListRef}
           data={state.products}
           renderItem={renderProduct}
           keyExtractor={keyExtractor}
@@ -143,9 +157,18 @@ export function MainScreen() {
           contentContainerStyle={styles.listContent}
           ItemSeparatorComponent={ItemSeparator}
           onEndReached={handleLoadMore}
+          // Trigger pagination when the user scrolls within half a screen-length of the bottom
           onEndReachedThreshold={0.5}
           ListFooterComponent={renderFooter}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={Colors.primary}
+              colors={[Colors.primary]}
+            />
+          }
         />
       )}
     </SafeAreaView>
