@@ -1,0 +1,43 @@
+import React from 'react';
+
+const mockStorage: Record<string, string> = {};
+
+jest.mock('react-native-safe-area-context', () => {
+  const insets = {top: 0, right: 0, bottom: 0, left: 0};
+  return {
+    SafeAreaProvider: ({children}: {children: React.ReactNode}) => children,
+    SafeAreaView: ({children}: {children: React.ReactNode}) => children,
+    useSafeAreaInsets: () => insets,
+    useSafeAreaFrame: () => ({x: 0, y: 0, width: 390, height: 844}),
+  };
+});
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn((key: string) => Promise.resolve(mockStorage[key] ?? null)),
+  setItem: jest.fn((key: string, value: string) => {
+    mockStorage[key] = value;
+    return Promise.resolve();
+  }),
+  removeItem: jest.fn((key: string) => {
+    delete mockStorage[key];
+    return Promise.resolve();
+  }),
+  clear: jest.fn(() => {
+    Object.keys(mockStorage).forEach(key => delete mockStorage[key]);
+    return Promise.resolve();
+  }),
+  getAllKeys: jest.fn(() => Promise.resolve(Object.keys(mockStorage))),
+  multiGet: jest.fn((keys: string[]) =>
+    Promise.resolve(keys.map(key => [key, mockStorage[key] ?? null])),
+  ),
+  multiSet: jest.fn((pairs: [string, string][]) => {
+    pairs.forEach(([key, value]) => {
+      mockStorage[key] = value;
+    });
+    return Promise.resolve();
+  }),
+  multiRemove: jest.fn((keys: string[]) => {
+    keys.forEach(key => delete mockStorage[key]);
+    return Promise.resolve();
+  }),
+}));
