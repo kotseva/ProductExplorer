@@ -47,10 +47,12 @@ export function CategoryFilter({
 const styles = StyleSheet.create({
   scroll: {
     flexGrow: 0,
+    minHeight: 64,
   },
   container: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 10,
+    paddingVertical: 8,
+    gap: 8,
+    alignItems: 'center',
   },
 });

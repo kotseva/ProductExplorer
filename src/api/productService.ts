@@ -26,7 +26,7 @@ export async function fetchProductsByCategory(
 
 export async function fetchCategories(): Promise<string[]> {
   const data = await apiGet<Array<{slug: string; name: string; url: string}>>(
-    `${PRODUCTS_ENDPOINT}/category-list`,
+    `${PRODUCTS_ENDPOINT}/categories`,
   );
   return data.map(c => c.slug);
 }
