@@ -2,12 +2,10 @@ import React, {useCallback, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Pressable,
   RefreshControl,
-  StyleSheet,
   Text,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
@@ -19,14 +17,15 @@ import {useThemeColors} from '../hooks/useThemeColors';
 import {useProducts, useProductsLoader} from '../hooks/useProducts';
 import {useFavorites} from '../hooks/useFavorites';
 import {ProductCard} from '../components/ProductCard';
-import {ProductCardSkeleton} from '../components/ProductCardSkeleton';
+import {ProductGridSkeleton} from '../components/ProductGridSkeleton';
+import {EmptyState} from '../components/EmptyState';
 import {CategoryFilter} from '../components/CategoryFilter';
-import {FontSizes, FontWeights, Layout, Sizes} from '../theme/constants';
-
-const GRID_PADDING = Layout.screenPadding;
-const CARD_GAP = Layout.cardGap;
-const NUM_COLUMNS = Layout.numColumns;
-const SKELETON_ROWS = [0, 1, 2];
+import {
+  styles,
+  GRID_PADDING,
+  CARD_GAP,
+  NUM_COLUMNS,
+} from './mainScreen.styles';
 
 export function MainScreen() {
   const navigation =
@@ -43,7 +42,6 @@ export function MainScreen() {
     setRefreshing(true);
     await loadProducts();
     setRefreshing(false);
-    // Reset scroll position so the user sees the freshly loaded content from the top
     flatListRef.current?.scrollToOffset({offset: 0, animated: true});
   }, [loadProducts]);
 
@@ -99,7 +97,6 @@ export function MainScreen() {
   const isEmpty = !state.isLoading && state.products.length === 0;
 
   return (
-    // Only apply safe-area inset at the top; the bottom is handled by the FlatList's paddingBottom
     <SafeAreaView
       style={[styles.safeArea, {backgroundColor: colors.background}]}
       edges={['top']}
@@ -121,39 +118,13 @@ export function MainScreen() {
       )}
 
       {isInitialLoading ? (
-        <View style={[styles.skeletonGrid, {paddingHorizontal: GRID_PADDING}]}>
-          {SKELETON_ROWS.map(rowIdx => (
-            <View key={rowIdx} style={[styles.skeletonRow, {gap: CARD_GAP}]}>
-              <View style={{width: cardWidth}}>
-                <ProductCardSkeleton />
-              </View>
-              <View style={{width: cardWidth}}>
-                <ProductCardSkeleton />
-              </View>
-            </View>
-          ))}
-        </View>
+        <ProductGridSkeleton cardWidth={cardWidth} />
       ) : isEmpty ? (
-        <View style={styles.emptyContainer}>
-          {state.error ? (
-            <>
-              <Text style={[styles.emptyText, 
-                {color: colors.textSecondary}]}>
-                  Please check your connection and try again.
-                  </Text>
-              <Pressable
-                onPress={loadProducts}
-                style={styles.retryButton}
-              >
-                <Text style={styles.retryText}>Retry</Text>
-              </Pressable>
-            </>            
-          ) : (
-            <Text style={[styles.emptyText, {color: colors.textSecondary}]}>
-              No products found
-            </Text>
-          )}
-        </View>
+        <EmptyState
+          hasError={!!state.error}
+          textColor={colors.textSecondary}
+          onRetry={loadProducts}
+        />
       ) : (
         <FlatList
           testID="product-list"
@@ -169,7 +140,6 @@ export function MainScreen() {
           contentContainerStyle={styles.listContent}
           ItemSeparatorComponent={ItemSeparator}
           onEndReached={handleLoadMore}
-          // Trigger pagination when the user scrolls within half a screen-length of the bottom
           onEndReachedThreshold={0.5}
           ListFooterComponent={renderFooter}
           showsVerticalScrollIndicator={false}
@@ -190,63 +160,3 @@ export function MainScreen() {
 function ItemSeparator() {
   return <View style={styles.separator} />;
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  header: {
-    paddingHorizontal: Sizes.sm,
-    paddingVertical: Sizes.sm,
-    borderBottomWidth: 1,
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: FontSizes.xl,
-    fontWeight: '700',
-    letterSpacing: -0.3,
-  },
-  columnWrapper: {
-    flexDirection: 'row',
-  },
-  listContent: {
-    paddingTop: Sizes.xs,
-    paddingBottom: Sizes.xxl,
-  },
-  separator: {
-    height: CARD_GAP,
-  },
-  skeletonGrid: {
-    paddingTop: Sizes.xs,
-    gap: CARD_GAP,
-  },
-  skeletonRow: {
-    flexDirection: 'row',
-  },
-  loadingFooter: {
-    paddingVertical: Sizes.md,
-    alignItems: 'center',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: Sizes.lg,
-  },
-  emptyText: {
-    fontSize: FontSizes.sm,
-    textAlign: 'center',
-  },
-  retryButton: {
-    marginTop: Sizes.sm,
-    paddingHorizontal: Sizes.md,
-    paddingVertical: Sizes.xs,
-    backgroundColor: Colors.primary,
-    borderRadius: Sizes.pill,
-  },
-  retryText: {
-    color: Colors.white,
-    fontSize: FontSizes.sm,
-    fontWeight: FontWeights.semibold,
-  },
-});
