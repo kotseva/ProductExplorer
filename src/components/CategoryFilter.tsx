@@ -1,6 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import {CategoryChip} from './CategoryChip';
+import { Layout } from '../theme/constants';
 
 interface CategoryFilterProps {
   categories: string[];
@@ -50,9 +51,9 @@ const styles = StyleSheet.create({
     minHeight: 64,
   },
   container: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 8,
+    paddingHorizontal: Layout.screenPadding,
+    paddingVertical: Layout.listPaddingTop,
+    gap: Layout.chipGap,
     alignItems: 'center',
   },
 });

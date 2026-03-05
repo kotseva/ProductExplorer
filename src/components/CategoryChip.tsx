@@ -2,6 +2,7 @@ import React, {memo} from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
 import {Colors} from '../theme/colors';
 import {useThemeColors} from '../hooks/useThemeColors';
+import { Radius } from '../theme/constants';
 
 interface CategoryChipProps {
   label: string;
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   chip: {
     paddingHorizontal: 20,
     paddingVertical: 8,
-    borderRadius: 9999,
+    borderRadius: Radius.pill,
   },
   chipSelected: {
     backgroundColor: Colors.primary,

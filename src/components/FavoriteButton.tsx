@@ -2,6 +2,7 @@ import React from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
 import {Colors} from '../theme/colors';
 import {useThemeColors} from '../hooks/useThemeColors';
+import { Sizes } from '../theme/constants';
 
 interface FavoriteButtonProps {
   isFavorite: boolean;
@@ -42,9 +43,9 @@ export function FavoriteButton({
 
 const styles = StyleSheet.create({
   button: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: Sizes.lg,
+    height: Sizes.lg,
+    borderRadius: Sizes.sm,
     alignItems: 'center',
     justifyContent: 'center',
   },

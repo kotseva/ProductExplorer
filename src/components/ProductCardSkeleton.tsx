@@ -1,6 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, StyleSheet, View} from 'react-native';
 import {useThemeColors} from '../hooks/useThemeColors';
+import { FontSizes, Sizes } from '../theme/constants';
 
 export function ProductCardSkeleton() {
   const {colors} = useThemeColors();
@@ -59,30 +60,30 @@ export function ProductCardSkeleton() {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 16,
+    borderRadius: Sizes.sm,
     overflow: 'hidden',
   },
   imagePlaceholder: {
     aspectRatio: 3 / 4,
   },
   content: {
-    padding: 12,
+    padding: Sizes.sm,
     gap: 8,
   },
   titleLine: {
-    height: 14,
-    borderRadius: 4,
+    height: FontSizes.sm,
+    borderRadius: Sizes.xxs,
     width: '75%',
   },
   subtitleLine: {
-    height: 12,
-    borderRadius: 4,
+    height: FontSizes.xs,
+    borderRadius: Sizes.xxs,
     width: '50%',
   },
   priceLine: {
-    height: 14,
-    borderRadius: 4,
+    height: FontSizes.sm,
+    borderRadius: Sizes.xxs,
     width: '33%',
-    marginTop: 4,
+    marginTop: Sizes.xxs,
   },
 });

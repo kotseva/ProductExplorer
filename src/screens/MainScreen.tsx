@@ -18,10 +18,11 @@ import {useFavorites} from '../hooks/useFavorites';
 import {ProductCard} from '../components/ProductCard';
 import {ProductCardSkeleton} from '../components/ProductCardSkeleton';
 import {CategoryFilter} from '../components/CategoryFilter';
+import { FontSizes, FontWeights, Layout, Sizes } from '../theme/constants';
 
-const GRID_PADDING = 16;
-const CARD_GAP = 12;
-const NUM_COLUMNS = 2;
+const GRID_PADDING = Layout.screenPadding;
+const CARD_GAP = Layout.cardGap;
+const NUM_COLUMNS = Layout.numColumns;
 const SKELETON_ROWS = [0, 1, 2];
 
 export function MainScreen() {
@@ -185,13 +186,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: Sizes.sm,
+    paddingVertical: Sizes.sm,
     borderBottomWidth: 1,
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: FontSizes.xl,
     fontWeight: '700',
     letterSpacing: -0.3,
   },
@@ -199,43 +200,43 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   listContent: {
-    paddingTop: 8,
-    paddingBottom: 48,
+    paddingTop: Sizes.xs,
+    paddingBottom: Sizes.xxl,
   },
   separator: {
     height: CARD_GAP,
   },
   skeletonGrid: {
-    paddingTop: 8,
+    paddingTop: Sizes.xs,
     gap: CARD_GAP,
   },
   skeletonRow: {
     flexDirection: 'row',
   },
   loadingFooter: {
-    paddingVertical: 24,
+    paddingVertical: Sizes.md,
     alignItems: 'center',
   },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 32,
+    paddingHorizontal: Sizes.lg,
   },
   emptyText: {
-    fontSize: 15,
+    fontSize: FontSizes.sm,
     textAlign: 'center',
   },
   retryButton: {
-    marginTop: 16,
-    paddingHorizontal: 24,
-    paddingVertical: 10,
+    marginTop: Sizes.sm,
+    paddingHorizontal: Sizes.md,
+    paddingVertical: Sizes.xs,
     backgroundColor: Colors.primary,
-    borderRadius: 9999,
+    borderRadius: Sizes.pill,
   },
   retryText: {
     color: Colors.white,
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.semibold,
   },
 });

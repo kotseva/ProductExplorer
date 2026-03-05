@@ -4,6 +4,7 @@ import {Product} from '../types/product';
 import {Colors} from '../theme/colors';
 import {useThemeColors} from '../hooks/useThemeColors';
 import {FavoriteButton} from './FavoriteButton';
+import { FontSizes, FontWeights, Sizes } from '../theme/constants';
 
 interface ProductCardProps {
   product: Product;
@@ -73,12 +74,12 @@ export const ProductCard = memo(function ProductCard({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 16,
+    borderRadius: Sizes.sm,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.06,
-    shadowRadius: 4,
+    shadowRadius: Sizes.xxs,
     elevation: 2,
   },
   pressed: {
@@ -94,31 +95,31 @@ const styles = StyleSheet.create({
   },
   favoriteWrapper: {
     position: 'absolute',
-    top: 8,
-    right: 8,
+    top: Sizes.xs,
+    right: Sizes.xs,
   },
   content: {
-    padding: 12,
+    padding: Sizes.sm,
     flex: 1,
   },
   title: {
-    fontSize: 14,
-    fontWeight: '600',
-    lineHeight: 18,
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.semibold,
+    lineHeight: FontSizes.sm,
   },
   subtitle: {
-    fontSize: 12,
-    marginTop: 4,
+    fontSize: FontSizes.xs,
+    marginTop: Sizes.xxs,
   },
   priceRow: {
     marginTop: 'auto',
-    paddingTop: 8,
+    paddingTop: Sizes.xs,
     flexDirection: 'row',
     alignItems: 'center',
   },
   price: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: FontSizes.lg,
+    fontWeight: FontWeights.bold,
     color: Colors.primary,
   },
 });
