@@ -1,9 +1,14 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FavoritesRepository} from '../repositories/FavoritesRepository';
 
-const FAVORITES_STORAGE_KEY = '@ProductExplorer:favorites';
-//Writes favorite IDs to AsyncStorage
+/**
+ * Use case: persist the current favorites list to storage.
+ * Triggered whenever the favoriteIds state changes so the
+ * user's selections survive app restart.
+ */
 export class PersistFavoritesUseCase {
+  constructor(private favoritesRepository: FavoritesRepository) {}
+
   async execute(ids: number[]): Promise<void> {
-    await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(ids));
+    return this.favoritesRepository.save(ids);
   }
 }

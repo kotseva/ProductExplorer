@@ -1,5 +1,6 @@
 import React, {createContext, useReducer, useCallback, useMemo} from 'react';
 import {Product} from '../types/product';
+import {ApiProductRepository} from '../repositories/ApiProductRepository';
 import {LoadProductsUseCase} from '../usecases/LoadProductsUseCase';
 import {LoadMoreProductsUseCase} from '../usecases/LoadMoreProductsUseCase';
 import {LoadCategoriesUseCase} from '../usecases/LoadCategoriesUseCase';
@@ -10,9 +11,11 @@ import {
   productsReducer,
 } from './productsReducer';
 
-const loadProductsUseCase = new LoadProductsUseCase();
-const loadMoreProductsUseCase = new LoadMoreProductsUseCase();
-const loadCategoriesUseCase = new LoadCategoriesUseCase();
+// Composition root: wire concrete repository into use cases.
+const productRepository = new ApiProductRepository();
+const loadProductsUseCase = new LoadProductsUseCase(productRepository);
+const loadMoreProductsUseCase = new LoadMoreProductsUseCase(productRepository);
+const loadCategoriesUseCase = new LoadCategoriesUseCase(productRepository);
 
 interface ProductsContextValue {
   state: ProductsState;

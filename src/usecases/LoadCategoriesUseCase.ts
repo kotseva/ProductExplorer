@@ -1,8 +1,13 @@
-import {fetchCategories} from '../api/productService';
+import {ProductRepository} from '../repositories/ProductRepository';
 
-//Fetches the list of available product categories
+/**
+ * Use case: retrieve the list of available product categories.
+ * Used by the UI to populate the category filter bar.
+ */
 export class LoadCategoriesUseCase {
+  constructor(private productRepository: ProductRepository) {}
+
   async execute(): Promise<string[]> {
-    return fetchCategories();
+    return this.productRepository.getCategories();
   }
 }

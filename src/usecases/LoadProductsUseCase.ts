@@ -1,15 +1,21 @@
 import {ProductsResponse} from '../types/product';
-import {fetchProducts, fetchProductsByCategory} from '../api/productService';
+import {ProductRepository} from '../repositories/ProductRepository';
 
-//Decides whether to fetch all products or filter by category
+/**
+ * Use case: load the initial page of products.
+ * Routes to a category-filtered or full-catalog fetch depending on
+ * the currently selected category.
+ */
 export class LoadProductsUseCase {
+  constructor(private productRepository: ProductRepository) {}
+
   async execute(
     selectedCategory: string | null,
     limit: number,
   ): Promise<ProductsResponse> {
     if (selectedCategory) {
-      return fetchProductsByCategory(selectedCategory);
+      return this.productRepository.getProductsByCategory(selectedCategory);
     }
-    return fetchProducts(limit, 0);
+    return this.productRepository.getProducts(limit, 0);
   }
 }

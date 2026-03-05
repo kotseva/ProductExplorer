@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
+import {AsyncStorageFavoritesRepository} from '../repositories/AsyncStorageFavoritesRepository';
 import {LoadFavoritesUseCase} from '../usecases/LoadFavoritesUseCase';
 import {PersistFavoritesUseCase} from '../usecases/PersistFavoritesUseCase';
 import {
@@ -14,8 +15,10 @@ import {
   favoritesReducer,
 } from './favoritesReducer';
 
-const loadFavoritesUseCase = new LoadFavoritesUseCase();
-const persistFavoritesUseCase = new PersistFavoritesUseCase();
+// Composition root: wire concrete repository into use cases.
+const favoritesRepository = new AsyncStorageFavoritesRepository();
+const loadFavoritesUseCase = new LoadFavoritesUseCase(favoritesRepository);
+const persistFavoritesUseCase = new PersistFavoritesUseCase(favoritesRepository);
 
 interface FavoritesContextValue {
   state: FavoritesState;
