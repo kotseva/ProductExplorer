@@ -3,12 +3,29 @@ import React from 'react';
 const mockStorage: Record<string, string> = {};
 
 jest.mock('react-native-safe-area-context', () => {
+  const mockReact = require('react');
   const insets = {top: 0, right: 0, bottom: 0, left: 0};
+  const frame = {x: 0, y: 0, width: 390, height: 844};
+
+  const SafeAreaInsetsContext = mockReact.createContext(insets);
+  const SafeAreaFrameContext = mockReact.createContext(frame);
+
   return {
-    SafeAreaProvider: ({children}: {children: React.ReactNode}) => children,
-    SafeAreaView: ({children}: {children: React.ReactNode}) => children,
+    SafeAreaProvider: ({children}) =>
+      mockReact.createElement(
+        SafeAreaInsetsContext.Provider,
+        {value: insets},
+        mockReact.createElement(
+          SafeAreaFrameContext.Provider,
+          {value: frame},
+          children,
+        ),
+      ),
+    SafeAreaView: ({children}) => children,
+    SafeAreaInsetsContext,
+    SafeAreaFrameContext,
     useSafeAreaInsets: () => insets,
-    useSafeAreaFrame: () => ({x: 0, y: 0, width: 390, height: 844}),
+    useSafeAreaFrame: () => frame,
   };
 });
 

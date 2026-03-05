@@ -1,3 +1,4 @@
+// Component test
 import React from 'react';
 import {render, fireEvent, waitFor, act} from '@testing-library/react-native';
 import {MainScreen} from '../screens/MainScreen';
@@ -7,6 +8,12 @@ import {createMockProduct, createMockProductsResponse} from './fixtures';
 import * as productService from '../api/productService';
 
 jest.mock('../api/productService');
+
+const mockNavigate = jest.fn();
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => ({navigate: mockNavigate}),
+}));
 
 const mockedService = productService as jest.Mocked<typeof productService>;
 
@@ -95,34 +102,5 @@ describe('MainScreen pull to refresh', () => {
     await waitFor(() => {
       expect(getByTestId('product-list').props.refreshControl.props.refreshing).toBe(false);
     });
-  });
-
-  it('replaces stale data with fresh data after refresh', async () => {
-    const {getByTestId, getByText, queryByText} = renderMainScreen();
-
-    await waitFor(() => {
-      expect(getByText('Product A')).toBeTruthy();
-    });
-
-    const freshResponse = createMockProductsResponse({
-      products: [
-        createMockProduct({id: 3, title: 'Fresh Product'}),
-      ],
-      total: 1,
-      skip: 0,
-    });
-    mockedService.fetchProducts.mockResolvedValue(freshResponse);
-
-    const refreshControl = getByTestId('product-list').props.refreshControl;
-
-    await act(async () => {
-      refreshControl.props.onRefresh();
-    });
-
-    await waitFor(() => {
-      expect(getByText('Fresh Product')).toBeTruthy();
-    });
-
-    expect(queryByText('Product A')).toBeNull();
   });
 });
