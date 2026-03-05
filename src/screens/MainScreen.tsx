@@ -105,11 +105,13 @@ export function MainScreen() {
         </Text>
       </View>
 
-      <CategoryFilter
-        categories={state.categories}
-        selectedCategory={state.selectedCategory}
-        onSelectCategory={handleCategorySelect}
-      />
+      {!(isEmpty && state.error) && (
+        <CategoryFilter
+          categories={state.categories}
+          selectedCategory={state.selectedCategory}
+          onSelectCategory={handleCategorySelect}
+        />
+      )}
 
       {isInitialLoading ? (
         <View style={[styles.skeletonGrid, {paddingHorizontal: GRID_PADDING}]}>
@@ -128,9 +130,10 @@ export function MainScreen() {
         <View style={styles.emptyContainer}>
           {state.error ? (
             <>
-              <Text style={[styles.emptyText, {color: colors.textSecondary}]}>
-                {state.error}
-              </Text>
+              <Text style={[styles.emptyText, 
+                {color: colors.textSecondary}]}>
+                  Please check your connection and try again.
+                  </Text>
               <Pressable
                 onPress={loadProducts}
                 style={styles.retryButton}

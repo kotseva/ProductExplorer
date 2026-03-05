@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   priceLine: {
-    height: FontSizes.sm,
+    height: FontSizes.lg,
     borderRadius: Sizes.xxs,
     width: '33%',
     marginTop: Sizes.xxs,
