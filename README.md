@@ -1,97 +1,139 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# ProductExplorer
 
-# Getting Started
+A React Native mobile application for browsing, filtering, and favoriting products from the [DummyJSON](https://dummyjson.com) catalog. Built with a **Clean Architecture** approach that separates domain logic from framework concerns through repository interfaces, use cases, and a context-based presentation layer.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+- **Product Catalog** — Browse products in a two-column grid with thumbnails, prices, brands, and discount badges.
+- **Category Filtering** — Filter the catalog by product category using a horizontally scrollable chip bar.
+- **Infinite Scroll** — Paginated loading that automatically fetches more products as the user scrolls.
+- **Pull-to-Refresh** — Swipe down to reload the product list.
+- **Product Details** — Tap a product to view a full-screen detail page with an image carousel, ratings, stock info, reviews, and description.
+- **Favorites** — Toggle a heart icon on any product to save it as a favorite; favorites persist across app restarts via AsyncStorage.
+- **Skeleton Loading** — Animated placeholder cards shown while data is being fetched.
+- **Light & Dark Theme** — Automatic theme support based on device appearance settings.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Architecture
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+The project follows **Clean Architecture** principles, organized into three layers:
 
-```sh
-# Using npm
-npm start
+```
+┌─────────────────────────────────────────────────┐
+│                  Presentation                   │
+│   Screens · Components · Hooks · Context/Store  │
+├─────────────────────────────────────────────────┤
+│                    Domain                       │
+│         Use Cases · Repository Interfaces       │
+├─────────────────────────────────────────────────┤
+│                     Data                        │
+│   ApiProductRepository · AsyncStorageFavorites  │
+│          productService · fetch client          │
+└─────────────────────────────────────────────────┘
+```
+### Key Design Decisions
 
-# OR using Yarn
-yarn start
+| Decision | Rationale |
+| --- | --- |
+| **Context + `useReducer`** over Redux/Zustand | The app has two small, well-scoped state slices. A lightweight built-in solution avoids extra dependencies and is easier to reason about. |
+| **Native `fetch`** over Axios | DummyJSON needs only simple GET requests. A minimal `apiGet` wrapper keeps the bundle small and avoids third-party HTTP library overhead. |
+| **AsyncStorage for favorites** | Favorites are a small list of integer IDs. AsyncStorage is sufficient and ships with a trivial API; a database would be over-engineering. |
+| **Use cases as classes** | Each use case has a single `execute()` method, making dependencies explicit via the constructor and keeping business logic isolated from React hooks. |
+| **No Expo** | The project uses the React Native CLI for full native module control and a leaner dependency tree. |
+
+---
+
+## Project Structure
+
+```
+src/
+├── api/                   # HTTP client and API service functions
+│   ├── client.ts
+│   └── productService.ts
+├── components/            # Reusable UI components
+│   ├── CategoryChip.tsx
+│   ├── CategoryFilter.tsx
+│   ├── DetailRow.tsx
+│   ├── FavoriteButton.tsx
+│   ├── ImageCarousel.tsx
+│   ├── ProductCard.tsx
+│   ├── ProductCardSkeleton.tsx
+│   └── ProductInfo.tsx
+├── hooks/                 # Custom React hooks
+│   ├── useFavorites.ts
+│   ├── useProducts.ts
+│   └── useThemeColors.ts
+├── repositories/          # Interfaces + concrete implementations
+│   ├── ProductRepository.ts
+│   ├── FavoritesRepository.ts
+│   ├── ApiProductRepository.ts
+│   └── AsyncStorageFavoritesRepository.ts
+├── screens/               # Full-page screen components
+│   ├── MainScreen.tsx
+│   └── ProductDetailsScreen.tsx
+├── store/                 # Context providers and reducers
+│   ├── ProductsContext.tsx
+│   ├── FavoritesContext.tsx
+│   ├── productsReducer.ts
+│   └── favoritesReducer.ts
+├── theme/                 # Colors, spacing, and typography tokens
+│   ├── colors.ts
+│   └── constants.ts
+├── types/                 # TypeScript type definitions
+│   ├── product.ts
+│   └── navigation.ts
+└── __tests__/             # Unit and integration tests
+    ├── client.test.ts
+    ├── productService.test.ts
+    ├── productsReducer.test.ts
+    ├── favoritesReducer.test.ts
+    ├── useFavorites.test.tsx
+    ├── MainScreen.test.tsx
+    ├── ProductDetailsScreen.test.tsx
+    └── fixtures.ts
 ```
 
-## Step 2: Build and run your app
+## Tech Stack
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+| Concern          | Technology                                      |
+| ---------------- | ----------------------------------------------- |
+| Framework        | React Native 0.84                               |
+| Language         | TypeScript                                       |
+| Navigation       | React Navigation (native stack)                  |
+| State Management | React Context + `useReducer`                     |
+| HTTP             | Native `fetch`                                   |
+| Local Storage    | `@react-native-async-storage/async-storage`      |
+| API              | [DummyJSON](https://dummyjson.com/docs/products) |
 
-### Android
+## Getting Started
+
+> Make sure you have completed the [React Native environment setup](https://reactnative.dev/docs/set-up-your-environment) before proceeding.
+
+### Install dependencies
 
 ```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+npm install
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+For iOS, install CocoaPods:
 
 ```sh
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Run the app
+
+Start the Metro bundler:
 
 ```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+npm start
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+Then, in a separate terminal:
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```sh
+# Android
+npm run android
 
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+# iOS
+npm run ios
