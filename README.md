@@ -1,8 +1,8 @@
-# ProductExplorer
+# 📱 ✨ProductExplorer
 
 A React Native mobile application for browsing, filtering, and favoriting products from the [DummyJSON](https://dummyjson.com) catalog. Built with a **Clean Architecture** approach that separates domain logic from framework concerns through repository interfaces, use cases, and a context-based presentation layer.
 
-## Features
+## ✨ Features
 
 - **Product Catalog** — Browse products in a two-column grid with thumbnails, prices, brands, and discount badges.
 - **Category Filtering** — Filter the catalog by product category using a horizontally scrollable chip bar.
@@ -13,7 +13,7 @@ A React Native mobile application for browsing, filtering, and favoriting produc
 - **Skeleton Loading** — Animated placeholder cards shown while data is being fetched.
 - **Light & Dark Theme** — Automatic theme support based on device appearance settings.
 
-## Architecture
+## 🏗️ Architecture
 
 The project follows **Clean Architecture** principles, organized into three layers:
 
@@ -30,19 +30,22 @@ The project follows **Clean Architecture** principles, organized into three laye
 │          productService · fetch client          │
 └─────────────────────────────────────────────────┘
 ```
-### Key Design Decisions
 
-| Decision | Rationale |
-| --- | --- |
-| **Context + `useReducer`** over Redux/Zustand | The app has two small, well-scoped state slices. A lightweight built-in solution avoids extra dependencies and is easier to reason about. |
-| **Native `fetch`** over Axios | DummyJSON needs only simple GET requests. A minimal `apiGet` wrapper keeps the bundle small and avoids third-party HTTP library overhead. |
-| **AsyncStorage for favorites** | Favorites are a small list of integer IDs. AsyncStorage is sufficient and ships with a trivial API; a database would be over-engineering. |
-| **Use cases as classes** | Each use case has a single `execute()` method, making dependencies explicit via the constructor and keeping business logic isolated from React hooks. |
-| **No Expo** | The project uses the React Native CLI for full native module control and a leaner dependency tree. |
+### 🎯 Key Design Decisions
+
+
+| Decision                                      | Rationale                                                                                                                                             |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Context + `useReducer`** over Redux/Zustand | The app has two small, well-scoped state slices. A lightweight built-in solution avoids extra dependencies and is easier to reason about.             |
+| **Native `fetch`** over Axios                 | DummyJSON needs only simple GET requests. A minimal `apiGet` wrapper keeps the bundle small and avoids third-party HTTP library overhead.             |
+| **AsyncStorage for favorites**                | Favorites are a small list of integer IDs. AsyncStorage is sufficient and ships with a trivial API; a database would be over-engineering.             |
+| **Use cases as classes**                      | Each use case has a single `execute()` method, making dependencies explicit via the constructor and keeping business logic isolated from React hooks. |
+| **No Expo**                                   | The project uses the React Native CLI for full native module control and a leaner dependency tree.                                                    |
+
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```
 src/
@@ -92,11 +95,12 @@ src/
     └── fixtures.ts
 ```
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-| Concern          | Technology                                      |
-| ---------------- | ----------------------------------------------- |
-| Framework        | React Native 0.84                               |
+
+| Concern          | Technology                                       |
+| ---------------- | ------------------------------------------------ |
+| Framework        | React Native 0.84                                |
 | Language         | TypeScript                                       |
 | Navigation       | React Navigation (native stack)                  |
 | State Management | React Context + `useReducer`                     |
@@ -104,11 +108,12 @@ src/
 | Local Storage    | `@react-native-async-storage/async-storage`      |
 | API              | [DummyJSON](https://dummyjson.com/docs/products) |
 
-## Getting Started
+
+## 🚀 Getting Started
 
 > Make sure you have completed the [React Native environment setup](https://reactnative.dev/docs/set-up-your-environment) before proceeding.
 
-### Install dependencies
+### 📦 Install dependencies
 
 ```sh
 npm install
@@ -121,7 +126,7 @@ bundle install
 bundle exec pod install
 ```
 
-### Run the app
+### ▶️ Run the app
 
 Start the Metro bundler:
 
@@ -137,3 +142,5 @@ npm run android
 
 # iOS
 npm run ios
+```
+
