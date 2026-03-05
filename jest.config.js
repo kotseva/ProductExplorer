@@ -1,6 +1,6 @@
 module.exports = {
   preset: 'react-native',
-  setupFiles: ['./jest.setup.js'],
+  setupFiles: ['./jest.setup.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testMatch: ['**/__tests__/**/*.test.{ts,tsx}', '**/*.test.{ts,tsx}'],
   transformIgnorePatterns: [
