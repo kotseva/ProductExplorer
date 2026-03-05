@@ -5,7 +5,8 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {LoadFavoritesUseCase} from '../usecases/LoadFavoritesUseCase';
+import {PersistFavoritesUseCase} from '../usecases/PersistFavoritesUseCase';
 import {
   FavoritesState,
   FavoritesAction,
@@ -13,7 +14,8 @@ import {
   favoritesReducer,
 } from './favoritesReducer';
 
-const FAVORITES_STORAGE_KEY = '@ProductExplorer:favorites';
+const loadFavoritesUseCase = new LoadFavoritesUseCase();
+const persistFavoritesUseCase = new PersistFavoritesUseCase();
 
 interface FavoritesContextValue {
   state: FavoritesState;
@@ -45,8 +47,7 @@ export function FavoritesProvider({children}: FavoritesProviderProps) {
 
   const loadFavoritesFromStorage = async () => {
     try {
-      const stored = await AsyncStorage.getItem(FAVORITES_STORAGE_KEY);
-      const ids: number[] = stored ? JSON.parse(stored) : [];
+      const ids = await loadFavoritesUseCase.execute();
       dispatch({type: 'LOAD_FAVORITES', payload: ids});
     } catch {
       dispatch({type: 'LOAD_FAVORITES', payload: []});
@@ -55,7 +56,7 @@ export function FavoritesProvider({children}: FavoritesProviderProps) {
 
   const persistFavorites = async (ids: number[]) => {
     try {
-      await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(ids));
+      await persistFavoritesUseCase.execute(ids);
     } catch {
       // Storage write failed; non-critical
     }

@@ -1,16 +1,18 @@
 import React, {createContext, useReducer, useCallback, useMemo} from 'react';
 import {Product} from '../types/product';
-import {
-  fetchProducts,
-  fetchProductsByCategory,
-  fetchCategories as fetchCategoriesApi,
-} from '../api/productService';
+import {LoadProductsUseCase} from '../usecases/LoadProductsUseCase';
+import {LoadMoreProductsUseCase} from '../usecases/LoadMoreProductsUseCase';
+import {LoadCategoriesUseCase} from '../usecases/LoadCategoriesUseCase';
 import {
   ProductsState,
   ProductsAction,
   initialProductsState,
   productsReducer,
 } from './productsReducer';
+
+const loadProductsUseCase = new LoadProductsUseCase();
+const loadMoreProductsUseCase = new LoadMoreProductsUseCase();
+const loadCategoriesUseCase = new LoadCategoriesUseCase();
 
 interface ProductsContextValue {
   state: ProductsState;
@@ -36,9 +38,10 @@ export function ProductsProvider({children}: ProductsProviderProps) {
   const loadProducts = useCallback(async () => {
     dispatch({type: 'FETCH_PRODUCTS_START'});
     try {
-      const response = state.selectedCategory
-        ? await fetchProductsByCategory(state.selectedCategory)
-        : await fetchProducts(state.limit, 0);
+      const response = await loadProductsUseCase.execute(
+        state.selectedCategory,
+        state.limit,
+      );
 
       dispatch({
         type: 'FETCH_PRODUCTS_SUCCESS',
@@ -61,16 +64,20 @@ export function ProductsProvider({children}: ProductsProviderProps) {
     if (
       state.isLoadingMore ||
       state.isLoading ||
-      state.products.length >= state.total
+      !loadMoreProductsUseCase.canLoadMore(state.products.length, state.total)
     ) {
       return;
     }
 
     dispatch({type: 'FETCH_MORE_START'});
     try {
-      const response = state.selectedCategory
-        ? await fetchProductsByCategory(state.selectedCategory)
-        : await fetchProducts(state.limit, state.skip);
+      const response = await loadMoreProductsUseCase.execute({
+        currentCount: state.products.length,
+        total: state.total,
+        selectedCategory: state.selectedCategory,
+        limit: state.limit,
+        skip: state.skip,
+      });
 
       dispatch({
         type: 'FETCH_MORE_SUCCESS',
@@ -101,7 +108,7 @@ export function ProductsProvider({children}: ProductsProviderProps) {
 
   const loadCategories = useCallback(async () => {
     try {
-      const categories = await fetchCategoriesApi();
+      const categories = await loadCategoriesUseCase.execute();
       dispatch({type: 'SET_CATEGORIES', payload: categories});
     } catch {
       // Categories are non-critical; silently fail
