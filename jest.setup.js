@@ -1,5 +1,3 @@
-import React from 'react';
-
 const mockStorage: Record<string, string> = {};
 
 jest.mock('react-native-safe-area-context', () => {

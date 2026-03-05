@@ -48,7 +48,7 @@ export function FavoritesProvider({children}: FavoritesProviderProps) {
       const stored = await AsyncStorage.getItem(FAVORITES_STORAGE_KEY);
       const ids: number[] = stored ? JSON.parse(stored) : [];
       dispatch({type: 'LOAD_FAVORITES', payload: ids});
-    } catch (_error) {
+    } catch {
       dispatch({type: 'LOAD_FAVORITES', payload: []});
     }
   };
@@ -56,7 +56,7 @@ export function FavoritesProvider({children}: FavoritesProviderProps) {
   const persistFavorites = async (ids: number[]) => {
     try {
       await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(ids));
-    } catch (_error) {
+    } catch {
       // Storage write failed; non-critical
     }
   };
