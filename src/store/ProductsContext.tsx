@@ -103,7 +103,7 @@ export function ProductsProvider({children}: ProductsProviderProps) {
     try {
       const categories = await fetchCategoriesApi();
       dispatch({type: 'SET_CATEGORIES', payload: categories});
-    } catch (_error) {
+    } catch {
       // Categories are non-critical; silently fail
     }
   }, []);

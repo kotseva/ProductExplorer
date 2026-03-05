@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pressable, StatusBar, StyleSheet, Text, useColorScheme} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ProductsProvider} from './src/store/ProductsContext';
 import {FavoritesProvider} from './src/store/FavoritesContext';
@@ -11,6 +11,26 @@ import {RootStackParamList} from './src/types/navigation';
 import {Colors} from './src/theme/colors';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+function BackButton() {
+  const isDarkMode = useColorScheme() === 'dark';
+  const navigation = useNavigation();
+  return (
+    <Pressable
+      onPress={() => navigation.goBack()}
+      style={({pressed}) => [
+        styles.backButton,
+        {
+          backgroundColor: isDarkMode
+            ? Colors.dark.surface
+            : Colors.light.surface,
+          opacity: pressed ? 0.7 : 1,
+        },
+      ]}>
+      <Text style={styles.backArrow}>{'‹'}</Text>
+    </Pressable>
+  );
+}
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -44,23 +64,9 @@ function App() {
               <Stack.Screen
                 name="ProductDetails"
                 component={ProductDetailsScreen}
-                options={({route, navigation}) => ({
+                options={({route}) => ({
                   title: route.params.product.title,
-                  headerLeft: () => (
-                    <Pressable
-                      onPress={() => navigation.goBack()}
-                      style={({pressed}) => [
-                        styles.backButton,
-                        {
-                          backgroundColor: isDarkMode
-                            ? Colors.dark.surface
-                            : Colors.light.surface,
-                          opacity: pressed ? 0.7 : 1,
-                        },
-                      ]}>
-                      <Text style={styles.backArrow}>{'‹'}</Text>
-                    </Pressable>
-                  ),
+                  headerLeft: BackButton,
                 })}
               />
             </Stack.Navigator>

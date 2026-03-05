@@ -28,12 +28,14 @@ export function FavoriteButton({
       hitSlop={8}
     >
       <Text
-        style={{
-          fontSize: size,
-          color: isFavorite ? Colors.primary : colors.favoriteDefault,
-          lineHeight: size + 4,
-          textAlign: 'center',
-        }}
+        style={[
+          styles.icon,
+          {
+            fontSize: size,
+            color: isFavorite ? Colors.primary : colors.favoriteDefault,
+            lineHeight: size + 4,
+          },
+        ]}
       >
         {isFavorite ? '♥' : '♡'}
       </Text>
@@ -51,5 +53,8 @@ const styles = StyleSheet.create({
   },
   pressed: {
     transform: [{scale: 0.9}],
+  },
+  icon: {
+    textAlign: 'center',
   },
 });

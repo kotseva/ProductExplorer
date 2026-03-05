@@ -1,6 +1,6 @@
 // Component test
 import React from 'react';
-import {render, fireEvent, waitFor, act} from '@testing-library/react-native';
+import {render, waitFor, act} from '@testing-library/react-native';
 import {MainScreen} from '../screens/MainScreen';
 import {ProductsProvider} from '../store/ProductsContext';
 import {FavoritesProvider} from '../store/FavoritesContext';
