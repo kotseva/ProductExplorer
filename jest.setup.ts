@@ -1,3 +1,27 @@
+jest.mock('react-native-screens', () => ({
+  enableScreens: jest.fn(),
+}));
+
+jest.mock('@react-navigation/native', () => ({
+  NavigationContainer: ({children}: {children: unknown}) => children,
+  useNavigation: () => ({navigate: jest.fn(), goBack: jest.fn()}),
+  useRoute: () => ({params: {}}),
+}));
+
+jest.mock('@react-navigation/native-stack', () => {
+  const react = require('react');
+  return {
+    createNativeStackNavigator: () => ({
+      Navigator: ({children}: {children: unknown}) => {
+        const screens = react.Children.toArray(children);
+        return screens[0] || null;
+      },
+      Screen: ({component: C}: {component: React.ComponentType}) =>
+        react.createElement(C, {}),
+    }),
+  };
+});
+
 const mockStorage: Record<string, string> = {};
 
 jest.mock('react-native-safe-area-context', () => {
