@@ -5,6 +5,6 @@ import App from '../App';
 test('renders correctly', async () => {
   const {getByText} = render(<App />);
   await waitFor(() => {
-    expect(getByText('Product Explorer')).toBeTruthy();
+    expect(getByText('Product Catalog')).toBeTruthy();
   });
 });
