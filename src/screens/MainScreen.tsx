@@ -10,7 +10,10 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Product} from '../types/product';
+import {RootStackParamList} from '../types/navigation';
 import {Colors} from '../theme/colors';
 import {useThemeColors} from '../hooks/useThemeColors';
 import {useProducts, useProductsLoader} from '../hooks/useProducts';
@@ -18,7 +21,7 @@ import {useFavorites} from '../hooks/useFavorites';
 import {ProductCard} from '../components/ProductCard';
 import {ProductCardSkeleton} from '../components/ProductCardSkeleton';
 import {CategoryFilter} from '../components/CategoryFilter';
-import { FontSizes, FontWeights, Layout, Sizes } from '../theme/constants';
+import {FontSizes, FontWeights, Layout, Sizes} from '../theme/constants';
 
 const GRID_PADDING = Layout.screenPadding;
 const CARD_GAP = Layout.cardGap;
@@ -26,6 +29,8 @@ const NUM_COLUMNS = Layout.numColumns;
 const SKELETON_ROWS = [0, 1, 2];
 
 export function MainScreen() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const {selectCategory, loadMoreProducts, loadProducts} = useProducts();
   const state = useProductsLoader();
   const {toggleFavorite, isFavorite} = useFavorites();
@@ -65,11 +70,13 @@ export function MainScreen() {
           product={item}
           isFavorite={isFavorite(item.id)}
           onFavoritePress={() => toggleFavorite(item.id)}
-          onPress={() => {}}
+          onPress={() =>
+            navigation.navigate('ProductDetails', {product: item})
+          }
         />
       </View>
     ),
-    [cardWidth, isFavorite, toggleFavorite],
+    [cardWidth, isFavorite, toggleFavorite, navigation],
   );
 
   const renderFooter = useCallback(() => {

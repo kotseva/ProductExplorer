@@ -3,7 +3,7 @@ export const Colors = {
   white: '#ffffff',
 
   light: {
-    background: '#f8f5f7',
+    background: '#F1F5F9',
     surface: '#ffffff',
     text: '#0f172a',
     textSecondary: '#64748b',
