@@ -1,3 +1,4 @@
+// Helper function test
 import {
   productsReducer,
   initialProductsState,

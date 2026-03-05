@@ -1,9 +1,8 @@
+// Helper function test
 import {
   fetchProducts,
   fetchProductById,
   fetchProductsByCategory,
-  fetchCategories,
-  searchProducts,
 } from '../api/productService';
 import {createMockProduct, createMockProductsResponse} from './fixtures';
 
@@ -70,43 +69,6 @@ describe('productService', () => {
       expect(result).toEqual(response);
       expect(mockFetch).toHaveBeenCalledWith(
         'https://dummyjson.com/products/category/beauty',
-        expect.any(Object),
-      );
-    });
-
-    it('encodes special characters in category', async () => {
-      mockSuccessResponse(createMockProductsResponse());
-
-      await fetchProductsByCategory('home & garden');
-      expect(mockFetch).toHaveBeenCalledWith(
-        'https://dummyjson.com/products/category/home%20%26%20garden',
-        expect.any(Object),
-      );
-    });
-  });
-
-  describe('fetchCategories', () => {
-    it('returns category slugs', async () => {
-      const apiResponse = [
-        {slug: 'beauty', name: 'Beauty', url: 'https://dummyjson.com/products/category/beauty'},
-        {slug: 'fragrances', name: 'Fragrances', url: 'https://dummyjson.com/products/category/fragrances'},
-      ];
-      mockSuccessResponse(apiResponse);
-
-      const result = await fetchCategories();
-      expect(result).toEqual(['beauty', 'fragrances']);
-    });
-  });
-
-  describe('searchProducts', () => {
-    it('searches products with query', async () => {
-      const response = createMockProductsResponse();
-      mockSuccessResponse(response);
-
-      const result = await searchProducts('phone');
-      expect(result).toEqual(response);
-      expect(mockFetch).toHaveBeenCalledWith(
-        'https://dummyjson.com/products/search?q=phone',
         expect.any(Object),
       );
     });

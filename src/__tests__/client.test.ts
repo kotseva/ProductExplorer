@@ -1,3 +1,4 @@
+// Helper function test
 import {apiGet, ApiError, NetworkError} from '../api/client';
 
 const mockFetch = jest.fn();
