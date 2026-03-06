@@ -8,17 +8,21 @@ interface FavoriteButtonProps {
   isFavorite: boolean;
   onPress: () => void;
   size?: number;
+  testID?: string;
 }
 
 export function FavoriteButton({
   isFavorite,
   onPress,
   size = 20,
+  testID,
 }: FavoriteButtonProps) {
   const {colors} = useThemeColors();
 
   return (
     <Pressable
+      testID={testID}
+      accessibilityLabel={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
       onPress={onPress}
       style={({pressed}) => [
         styles.button,

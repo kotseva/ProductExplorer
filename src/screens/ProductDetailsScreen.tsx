@@ -20,7 +20,7 @@ export function ProductDetailsScreen({route}: Props) {
     product.images.length > 0 ? product.images : [product.thumbnail];
 
   return (
-    <View style={[styles.root, {backgroundColor: colors.background}]}>
+    <View testID="product-details-screen" style={[styles.root, {backgroundColor: colors.background}]}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
@@ -30,6 +30,7 @@ export function ProductDetailsScreen({route}: Props) {
           overlay={
             <View style={styles.favoriteWrapper}>
               <FavoriteButton
+                testID="favorite-btn-details"
                 isFavorite={isFavorite(product.id)}
                 onPress={() => toggleFavorite(product.id)}
               />

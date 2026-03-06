@@ -17,6 +17,7 @@ function BackButton() {
   const navigation = useNavigation();
   return (
     <Pressable
+      testID="back-button"
       onPress={() => navigation.goBack()}
       style={({pressed}) => [
         styles.backButton,
