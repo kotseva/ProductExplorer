@@ -2,6 +2,10 @@
 
 A React Native mobile application for browsing, filtering, and favoriting products from the [DummyJSON](https://dummyjson.com) catalog. Built with a **Clean Architecture** approach that separates domain logic from framework concerns through repository interfaces, use cases, and a context-based presentation layer.
 
+<img width="300" height="650" alt="Simulator Screenshot - iPhone 17 Pro - 2026-03-06 at 10 49 24" src="https://github.com/user-attachments/assets/900f4b79-674e-408f-b24f-b2817dc9ea85" />
+<img width="300" height="650" alt="Simulator Screenshot - iPhone 17 Pro - 2026-03-06 at 10 49 35" src="https://github.com/user-attachments/assets/7533a0dc-8665-4225-ad33-5f294f751781" />
+
+
 ## ✨ Features
 
 - **Product Catalog** — Browse products in a two-column grid with thumbnails, prices, brands, and discount badges.
