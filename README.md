@@ -1,4 +1,4 @@
-# 📱 ✨ProductExplorer
+📱 ✨ProductExplorer
 
 A React Native mobile application for browsing, filtering, and favoriting products from the [DummyJSON](https://dummyjson.com) catalog. Built with a **Clean Architecture** approach that separates domain logic from framework concerns through repository interfaces, use cases, and a context-based presentation layer.
 
@@ -143,4 +143,59 @@ npm run android
 # iOS
 npm run ios
 ```
+
+## 🧪 Testing
+
+### Unit Tests
+
+Run the unit and integration tests with Jest:
+
+```sh
+npm test
+```
+
+### E2E Tests (Detox)
+
+The project includes end-to-end tests powered by [Detox](https://wix.github.io/Detox/) that exercise real user flows against a running app on a simulator/emulator.
+
+**Test suite:** `e2e/productFavorites.test.js`
+
+
+| Test                          | What it verifies                                                                                                             |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Product catalog on launch     | App boots, product grid and header render                                                                                    |
+| Add to favorites from details | Tap product → details screen opens → tap heart → state switches to favorited → navigate back → card reflects favorited state |
+| Toggle favorite from card     | Favorite from card → open details → verify propagated → unfavorite from details → verify removed → navigate back             |
+
+
+#### Prerequisites
+
+1. Complete the [React Native environment setup](https://reactnative.dev/docs/set-up-your-environment).
+2. For iOS, make sure you have an **iPhone 17 Pro** simulator available (configured in `.detoxrc.js`).
+3. For Android, create a **Pixel_3a_API_30_x86** AVD (or update `.detoxrc.js` to match your emulator).
+4. You can manually set other devices
+
+#### Build the test app
+
+```sh
+# iOS
+npx detox build --configuration ios.sim.debug
+
+# Android
+npx detox build --configuration android.emu.debug
+```
+
+#### Run the tests
+
+Start Metro in a separate terminal first (`npm start`), then:
+
+```sh
+# iOS
+npx detox test --configuration ios.sim.debug
+
+# Android
+npx detox test --configuration android.emu.debug
+```
+
+> Each test launches a fresh app instance with cleared data (`delete: true`) so that persisted favorites from previous tests never leak across runs.
 
