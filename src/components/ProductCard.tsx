@@ -27,6 +27,7 @@ export const ProductCard = memo(function ProductCard({
 
   return (
     <Pressable
+      testID={`product-card-${product.id}`}
       onPress={onPress}
       style={({pressed}) => [
         styles.container,
@@ -46,7 +47,11 @@ export const ProductCard = memo(function ProductCard({
           resizeMode="cover"
         />
         <View style={styles.favoriteWrapper}>
-          <FavoriteButton isFavorite={isFavorite} onPress={onFavoritePress} />
+          <FavoriteButton
+            testID={`favorite-btn-card-${product.id}`}
+            isFavorite={isFavorite}
+            onPress={onFavoritePress}
+          />
         </View>
       </View>
       <View style={styles.content}>
